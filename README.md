@@ -9,6 +9,10 @@ ITパスポートの問題を解いて学習するサンプルアプリ
 - Android Studio
 - XCode
 
+## レポジトリをCloneする方法
+- https経由とSSH経由というのがありまして・・・・
+- git clone git@github.com:gothedistance/it_passport_training_app.git
+
 ### asdf のセットアップ
 
 プロジェクト単位で Flutter のバージョンを切り替えられるようにしたいので、[asdf](https://asdf-vm.com)というライブラリを使います。
