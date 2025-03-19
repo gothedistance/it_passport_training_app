@@ -1,0 +1,2 @@
+# it_passport_training_app
+ITパスポートの問題を解いて学習するサンプルアプリ
