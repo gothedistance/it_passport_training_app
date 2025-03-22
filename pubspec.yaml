@@ -87,3 +87,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  # アセットの設定
+  assets:
+    - .vscode/question.json  # .vscode フォルダ内の question.json を指定

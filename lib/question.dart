@@ -1,13 +1,12 @@
-class Question {
-  final int number;
-  final String title;
+import 'package:flutter/material.dart';
 
-  Question({required this.number, required this.title});
-}
+class Question extends StatelessWidget {
+  const Question({super.key, required this.questionText});
 
-class Option {
-  final String key;
-  final String value;
+  final String questionText;
 
-  Option({required this.key, required this.value});
+  @override
+  Widget build(BuildContext context) {
+    return Text(questionText);
+  }
 }
