@@ -12,8 +12,15 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isVisible = false; // 分類、回答、解説表示フラグ
 
   @override
   Widget build(BuildContext context) {
@@ -28,33 +35,42 @@ class MyApp extends StatelessWidget {
         body: Scrollbar(
           child: SingleChildScrollView(
             primary: true,
-
             child: Column(
               children: [
-                const SizedBox(height: 10),
-                Number(number: dummyData['id'].toString()), // 問題数を定義したクラス
-                const SizedBox(height: 30),
-                Question(questionText: dummyData['question'].toString()), // 問題を定義
-                const SizedBox(height: 50),
-                // 問題の選択肢を定義したクラス
+                // 問題数
+                Number(number: dummyData['id'].toString()),
+
+                // 問題
+                Question(questionText: dummyData['question'].toString()),
+
+                // 問題の選択肢
                 Choices(
                   choiceQuestions: dummyData['choice_questions'] as List<Map<String, String>>,
                 ),
-                SizedBox(height: 30),
-                Classification(classification: dummyData['classification'].toString()), //分類を定義をクラス
-                SizedBox(height: 30),
-                Answer(answer: dummyData['answer'].toString()), //正解を定義したクラス
-                SizedBox(height: 30),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  child: Text('▪️解説', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+                //分類
+                if (_isVisible) ...[
+                  Classification(classification: dummyData['classification'].toString()),
+                ],
+
+                //正解
+                Answer(
+                  answer: dummyData['answer'].toString(),
+                  show_answer: () {
+                    setState(() {
+                      _isVisible = true;
+                    });
+                  },
+                  answer_Visible: _isVisible,
                 ),
-                SizedBox(height: 10),
-                // 解説を定義したクラス
-                Description(
-                  descriptions: dummyData['descriptions'] as List<Map<String, String>>,
-                  choice_questions: dummyData['choice_questions'] as List<Map<String, String>>,
-                ),
+
+                // 解説
+                if (_isVisible) ...[
+                  Description(
+                    descriptions: dummyData['descriptions'] as List<Map<String, String>>,
+                    choice_questions: dummyData['choice_questions'] as List<Map<String, String>>,
+                  ),
+                ],
               ],
             ),
           ),

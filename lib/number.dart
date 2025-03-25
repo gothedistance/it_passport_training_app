@@ -8,14 +8,17 @@ class Number extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('問$number', style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-        const Spacer(), //空きスペースを埋める
-        IconButton(icon: const Icon(Icons.calculate_outlined), onPressed: () {}, iconSize: 35),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: 10, bottom: 30),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('問$number', style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+          const Spacer(), //空きスペースを埋める
+          IconButton(icon: const Icon(Icons.calculate_outlined), onPressed: () {}, iconSize: 35),
+        ],
+      ),
     );
   }
 }

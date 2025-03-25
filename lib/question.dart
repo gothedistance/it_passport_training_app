@@ -7,6 +7,6 @@ class Question extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(questionText);
+    return Padding(padding: EdgeInsets.only(bottom: 50), child: Text(questionText));
   }
 }
