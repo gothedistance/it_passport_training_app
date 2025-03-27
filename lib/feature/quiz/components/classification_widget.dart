@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Classification extends StatelessWidget {
-  const Classification({super.key, required this.classification});
+class ClassificationWidget extends StatelessWidget {
+  const ClassificationWidget({super.key, required this.classification});
 
   final String classification;
 
