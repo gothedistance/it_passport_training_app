@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:it_passport_training_app/feature/core/quiz.dart';
 
 class ChoicesWidget extends StatefulWidget {
-  const ChoicesWidget({super.key, required this.choiceQuestions, required this.onSelected});
+  const ChoicesWidget({
+    super.key,
+    required this.choiceQuestions,
+    required this.onSelected,
+    required this.currentAnswer,
+    //required this.visible,
+  });
 
   // 選択問題を定義
   final List<ChoiceQuestions> choiceQuestions;
   final void Function(int answer) onSelected;
+  final int currentAnswer;
 
   @override
   State<ChoicesWidget> createState() => _ChoicesWidgetState();
@@ -14,6 +21,7 @@ class ChoicesWidget extends StatefulWidget {
 
 class _ChoicesWidgetState extends State<ChoicesWidget> {
   int selected = 0;
+  bool choice_visible = false;
 
   @override
   Widget build(BuildContext context) {

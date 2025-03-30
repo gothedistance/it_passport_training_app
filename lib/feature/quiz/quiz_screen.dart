@@ -17,6 +17,8 @@ class QuizScreen extends StatefulWidget {
 
 class QuizScreenState extends State<QuizScreen> {
   int selected = 0;
+  int selectAnswer = 0;
+  bool choiceVisible = false;
   bool visible = false;
 
   @override
@@ -40,16 +42,28 @@ class QuizScreenState extends State<QuizScreen> {
                 // 問題の選択肢
                 ChoicesWidget(
                   choiceQuestions: quizData.choices,
-                  onSelected: (answer) {
-                    selected = answer;
-                  },
+                  currentAnswer: quizData.answer,
+                  onSelected:
+                      (answer) => setState(() {
+                        selected = answer;
+                        choiceVisible = true;
+                      }),
                 ),
                 AnswerButton(
-                  onPressed: () {
-                    setState(() {
-                      visible = true;
-                    });
-                  },
+                  onPressed:
+                      // 回答選択時のフラグを識別
+                      choiceVisible == true
+                          ? () {
+                            setState(() {
+                              selectAnswer = selected + 1;
+                              selectAnswer == quizData.answer ? visible = true : visible = false;
+                              // 選択された回答が正解か不正解かを判定
+                              visible == true
+                                  ? showAnswerDialog(context, "正解！", "○", Colors.green)
+                                  : showAnswerDialog(context, "残念‥", "×", Colors.red);
+                            });
+                          }
+                          : null,
                 ),
                 //分類
                 if (visible) ...[

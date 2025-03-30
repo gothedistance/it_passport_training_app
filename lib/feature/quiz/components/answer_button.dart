@@ -16,3 +16,23 @@ class AnswerButton extends StatelessWidget {
     );
   }
 }
+
+//　正解、不正解をダイヤログ表示するメソッド
+void showAnswerDialog(BuildContext context, message, icon, Color color) {
+  showDialog(
+    context: context,
+    builder: (_) {
+      return AlertDialog(
+        title: Column(
+          children: [
+            Text(icon, style: TextStyle(fontSize: 100, color: color)),
+            Text(message, style: TextStyle(color: color)),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: Text('OK')),
+        ],
+      );
+    },
+  );
+}
