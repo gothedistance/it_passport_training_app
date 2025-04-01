@@ -20,6 +20,7 @@ class QuizScreenState extends State<QuizScreen> {
   int selectAnswer = 0;
   // 確定した回答
   int finalAnswer = 0;
+<<<<<<< HEAD
 
   int current = 1;
 
@@ -27,6 +28,8 @@ class QuizScreenState extends State<QuizScreen> {
   void initState() {
     super.initState();
   }
+=======
+>>>>>>> 70ca5d9 (ファイナルアンサーを用意して、正解・不正解にかかわらず回答OPEN)
 
   @override
   Widget build(BuildContext context) {
