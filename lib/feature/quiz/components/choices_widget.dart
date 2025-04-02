@@ -21,7 +21,6 @@ class ChoicesWidget extends StatefulWidget {
 
 class _ChoicesWidgetState extends State<ChoicesWidget> {
   int selected = 0;
-  bool choice_visible = false;
 
   @override
   Widget build(BuildContext context) {

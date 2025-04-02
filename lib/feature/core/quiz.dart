@@ -18,6 +18,7 @@ class Quiz {
     required this.descriptions,
   });
   // コンストラクタ(クラスの変数ではない引数を元にオブジェクトを作るキーワードがfactory)
+  //factory Quiz.fromJson(Map<String, dynamic> json) {
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
       version: json['version'] as String,
