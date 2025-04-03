@@ -1,10 +1,6 @@
 import 'package:it_passport_training_app/feature/core/quiz.dart';
 
-<<<<<<< HEAD
-const List<Map<String, dynamic>> dummyData = [
-=======
 const dummyData = [
->>>>>>> fabfe5d (次の問題に行く)
   {
     "version": "令和６年",
     "id": 1,
@@ -34,25 +30,6 @@ const dummyData = [
   {
     "version": "令和６年",
     "id": 2,
-<<<<<<< HEAD
-    "question":
-        "情報システムに不正に侵入し，サービスを停止させて社会的混乱を生じさせるような行為に対して，国全体で体系的に防御施策を講じるための基本理念を定め，国の責務などを明らかにした法律はどれか。",
-    "choice_questions": [
-      {"key": "ア", "value": "公益通報者保護法"},
-      {"key": "イ", "value": "サイバーセキュリティ基本法"},
-      {"key": "ウ", "value": "不正アクセス禁止法"},
-      {"key": "エ", "value": "プロバイダ責任制限法"},
-    ],
-    "classification": "ストラテジ系 > 法務 > セキュリティ関連法規",
-    "answer": 2,
-    "descriptions": {
-      "summary": "サイバーセキュリティ基本法は...",
-      "answer": [
-        {"key": "ア", "kaisetu": "公益通報者保護法は..."},
-        {"key": "イ", "kaisetu": "正しい。サイバーセキュリティ基本法は..."},
-        {"key": "ウ", "kaisetu": "不正アクセス禁止法は..."},
-        {"key": "エ", "kaisetu": "プロバイダ責任制限法は..."},
-=======
     "question": "Aマーケティングオートメーション(MA)に関する記述として，最も適切なものはどれか。",
     "choice_questions": [
       {"key": "ア", "value": "A企業内に蓄積された大量のデータを分析して，事業戦略などに有効活用する。    "},
@@ -73,15 +50,15 @@ const dummyData = [
         {"key": "イ", "kaisetu": "ePOS(Point Of Sales)に関する記述です。"},
         {"key": "ウ", "kaisetu": "eRPA(Robotic Process Automation)に関する記述です。"},
         {"key": "エ", "kaisetu": "e正しい。マーケティングオートメーションに関する記述です。"},
->>>>>>> fabfe5d (次の問題に行く)
       ],
     },
   },
 ];
 
-<<<<<<< HEAD
-//final quizData = Quiz.fromJson(dummyData[1]);
 final List<Quiz> quizList = dummyData.map((data) => Quiz.fromJson(data)).toList();
-=======
-final quizDataList = dummyData.map((data) => Quiz.fromJson(data)).toList();
->>>>>>> fabfe5d (次の問題に行く)
+
+Future<Quiz> getQuizData(int current) async {
+  // Simulate a network request
+  await Future.delayed(const Duration(seconds: 2));
+  return quizList[current - 1];
+}
