@@ -12,18 +12,7 @@ class ChoicesWidget extends StatelessWidget {
   // 選択問題を定義
   final List<ChoiceQuestions> choiceQuestions;
   final void Function(int answer) onSelected;
-<<<<<<< HEAD
-  final int currentAnswer;
-
-  @override
-  State<ChoicesWidget> createState() => _ChoicesWidgetState();
-}
-
-class _ChoicesWidgetState extends State<ChoicesWidget> {
-  int selected = 0;
-=======
   final int selected;
->>>>>>> fabfe5d (次の問題に行く)
 
   @override
   Widget build(BuildContext context) {

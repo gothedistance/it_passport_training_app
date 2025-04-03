@@ -20,16 +20,6 @@ class QuizScreenState extends State<QuizScreen> {
   int selectAnswer = 0;
   // 確定した回答
   int finalAnswer = 0;
-<<<<<<< HEAD
-
-  int current = 1;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-=======
->>>>>>> 70ca5d9 (ファイナルアンサーを用意して、正解・不正解にかかわらず回答OPEN)
 
   int current = 1;
 
@@ -40,11 +30,7 @@ class QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     final quizData = quizList[current - 1];
-=======
-    final quizData = quizDataList[current - 1];
->>>>>>> fabfe5d (次の問題に行く)
 
     return MaterialApp(
       home: Scaffold(
