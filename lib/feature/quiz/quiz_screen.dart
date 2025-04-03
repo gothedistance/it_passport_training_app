@@ -32,6 +32,11 @@ class QuizScreenState extends State<QuizScreen> {
 >>>>>>> 70ca5d9 (ファイナルアンサーを用意して、正解・不正解にかかわらず回答OPEN)
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final quizData = quizList[current - 1];
 
@@ -88,15 +93,21 @@ class QuizScreenState extends State<QuizScreen> {
                 ? FloatingActionButton(
                   onPressed: () {
                     setState(() {
+<<<<<<< HEAD
                       current++;
                       selectAnswer = 0;
                       finalAnswer = 0;
                     });
+=======
+                      print("set state");
+                    });
+                    // TODO: 次の問題を表示する
+>>>>>>> 8f41e94 (AA)
                   },
                   child: const Icon(Icons.arrow_forward),
                 )
                 : null,
       ),
-    );
+    )
   }
 }
