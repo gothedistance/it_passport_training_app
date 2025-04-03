@@ -1,6 +1,10 @@
 import 'package:it_passport_training_app/feature/core/quiz.dart';
 
+<<<<<<< HEAD
 const List<Map<String, dynamic>> dummyData = [
+=======
+const dummyData = [
+>>>>>>> fabfe5d (次の問題に行く)
   {
     "version": "令和６年",
     "id": 1,
@@ -30,6 +34,7 @@ const List<Map<String, dynamic>> dummyData = [
   {
     "version": "令和６年",
     "id": 2,
+<<<<<<< HEAD
     "question":
         "情報システムに不正に侵入し，サービスを停止させて社会的混乱を生じさせるような行為に対して，国全体で体系的に防御施策を講じるための基本理念を定め，国の責務などを明らかにした法律はどれか。",
     "choice_questions": [
@@ -47,10 +52,36 @@ const List<Map<String, dynamic>> dummyData = [
         {"key": "イ", "kaisetu": "正しい。サイバーセキュリティ基本法は..."},
         {"key": "ウ", "kaisetu": "不正アクセス禁止法は..."},
         {"key": "エ", "kaisetu": "プロバイダ責任制限法は..."},
+=======
+    "question": "Aマーケティングオートメーション(MA)に関する記述として，最も適切なものはどれか。",
+    "choice_questions": [
+      {"key": "ア", "value": "A企業内に蓄積された大量のデータを分析して，事業戦略などに有効活用する。    "},
+      {"key": "イ", "value": "A小売業やサービス業において，販売した商品単位の情報の収集・蓄積及び分析を行う。"},
+      {
+        "key": "ウ",
+        "value": "Aこれまで人間が手作業で行っていた定型業務を，AIや機械学習などを取り入れたソフトウェアのロボットが代行することによって自動化や効率化を図る。",
+      },
+      {"key": "エ", "value": "A見込み顧客の抽出，獲得，育成などの営業活動を効率化する。"},
+    ],
+    "classification": "Aストラテジ系 > 経営戦略マネジメント > マーケティング",
+    "answer": 4,
+    "descriptions": {
+      "summary":
+          "eeeマーケティングオートメーションは、その名のとおり顧客獲得・維持のためのマーケティング活動をITシステムで自動化するための仕組みです。従来は営業担当が人力で行っていた、メール、LINE、SNSなどの配信や効果の測定、見込み顧客の管理、顧客の興味に応じたアプローチ、有望な見込み顧客の可視化、データ分析などをシステム上で行えるようにすることで、マーケティング活動の効率化を図ることができます。見込み顧客に継続的にフォローするためにはコストが掛かりますが、これを自動化することで新規商談の増加を期待できるなどの強みがあります。したがって、見込み顧客の管理について記述している「エ」が適切です。",
+      "answer": [
+        {"key": "ア", "kaisetu": "eデータマイニングに関する記述です。"},
+        {"key": "イ", "kaisetu": "ePOS(Point Of Sales)に関する記述です。"},
+        {"key": "ウ", "kaisetu": "eRPA(Robotic Process Automation)に関する記述です。"},
+        {"key": "エ", "kaisetu": "e正しい。マーケティングオートメーションに関する記述です。"},
+>>>>>>> fabfe5d (次の問題に行く)
       ],
     },
   },
 ];
 
+<<<<<<< HEAD
 //final quizData = Quiz.fromJson(dummyData[1]);
 final List<Quiz> quizList = dummyData.map((data) => Quiz.fromJson(data)).toList();
+=======
+final quizDataList = dummyData.map((data) => Quiz.fromJson(data)).toList();
+>>>>>>> fabfe5d (次の問題に行く)

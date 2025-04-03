@@ -31,6 +31,8 @@ class QuizScreenState extends State<QuizScreen> {
 =======
 >>>>>>> 70ca5d9 (ファイナルアンサーを用意して、正解・不正解にかかわらず回答OPEN)
 
+  int current = 1;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +40,11 @@ class QuizScreenState extends State<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final quizData = quizList[current - 1];
+=======
+    final quizData = quizDataList[current - 1];
+>>>>>>> fabfe5d (次の問題に行く)
 
     return MaterialApp(
       home: Scaffold(
@@ -59,7 +65,7 @@ class QuizScreenState extends State<QuizScreen> {
                 // 問題の選択肢
                 ChoicesWidget(
                   choiceQuestions: quizData.choices,
-                  currentAnswer: quizData.answer,
+                  selected: selectAnswer,
                   onSelected:
                       (answer) => setState(() {
                         selectAnswer = answer + 1;
@@ -93,21 +99,15 @@ class QuizScreenState extends State<QuizScreen> {
                 ? FloatingActionButton(
                   onPressed: () {
                     setState(() {
-<<<<<<< HEAD
                       current++;
                       selectAnswer = 0;
                       finalAnswer = 0;
                     });
-=======
-                      print("set state");
-                    });
-                    // TODO: 次の問題を表示する
->>>>>>> 8f41e94 (AA)
                   },
                   child: const Icon(Icons.arrow_forward),
                 )
                 : null,
       ),
-    )
+    );
   }
 }
