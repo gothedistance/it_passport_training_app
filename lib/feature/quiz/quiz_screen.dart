@@ -16,23 +16,41 @@ class QuizScreen extends StatefulWidget {
 }
 
 class QuizScreenState extends State<QuizScreen> {
-  int currentIndex = 0; // 現在の問題番号
-  int selected = 0;
+  // 選択した回答
   int selectAnswer = 0;
-  int correctAnswers = 0; // 正解数
-  int totalAnswers = 0; // 回答数
-  bool choiceVisible = false;
-  bool visible = false;
+  // 確定した回答
+  int finalAnswer = 0;
+<<<<<<< HEAD
+
+  int current = 1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+=======
+>>>>>>> 70ca5d9 (ファイナルアンサーを用意して、正解・不正解にかかわらず回答OPEN)
+
+  int current = 1;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 現在の問題
-    final quizData = quizList[currentIndex];
+<<<<<<< HEAD
+    final quizData = quizList[current - 1];
+=======
+    final quizData = quizDataList[current - 1];
+>>>>>>> fabfe5d (次の問題に行く)
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           centerTitle: false,
-          title: Text('ITパスポート2020', style: TextStyle(color: Colors.black)),
+          title: const Text('ITパスポート2020', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.orange,
         ),
         body: SingleChildScrollView(
@@ -40,13 +58,6 @@ class QuizScreenState extends State<QuizScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // 問題数 正答率
-                Text(
-                  correctAnswers == 0
-                      ? "正解数 $correctAnswers / $totalAnswers 問中  正答率 0%"
-                      : "正解数 $correctAnswers / $totalAnswers 問中  正答率 ${((correctAnswers / totalAnswers) * 100)}%",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
                 // 問題数
                 QuestionNumberWidget(number: quizData.id),
                 // 問題
@@ -54,64 +65,48 @@ class QuizScreenState extends State<QuizScreen> {
                 // 問題の選択肢
                 ChoicesWidget(
                   choiceQuestions: quizData.choices,
-                  currentAnswer: quizData.answer,
+                  selected: selectAnswer,
                   onSelected:
                       (answer) => setState(() {
-                        selected = answer;
-                        choiceVisible = true;
+                        selectAnswer = answer + 1;
                       }),
                 ),
-                // 回答ボタン
                 AnswerButton(
                   onPressed:
-                      // 回答選択時のフラグを識別
-                      choiceVisible == true
-                          ? () {
+                      selectAnswer != 0 && finalAnswer == 0
+                          ? () async {
                             setState(() {
-                              totalAnswers++; // 回答数カウント
-                              visible = true;
-                              selectAnswer = selected + 1;
-                              if (selectAnswer == quizData.answer) {
-                                correctAnswers++; // 正解数カウント
-                                showAnswerDialog(context, "正解！", "○", Colors.green);
-                              } else {
-                                showAnswerDialog(context, "残念‥", "×", Colors.red);
-                              }
+                              finalAnswer = selectAnswer;
                             });
+                            finalAnswer == quizData.answer
+                                ? showAnswerDialog(context, "正解！", "○", Colors.green)
+                                : showAnswerDialog(context, "残念‥", "×", Colors.red);
                           }
                           : null,
                 ),
-                // 分類
-                if (visible) ...[
+                //分類・正解・解説
+                if (finalAnswer > 0) ...[
                   ClassificationWidget(classification: quizData.classification),
-                  // 正解
                   AnswerWidget(answer: quizData.answer),
                   DescriptionWidget(description: quizData.descriptions),
-                  // 次の問題へ
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () {
-                        setState(() {
-                          if (currentIndex < quizList.length - 1) {
-                            currentIndex++; // 次の問題へ進む
-                            choiceVisible = false; // 回答ボタン非活性
-                            visible = false; // 正解等を非表示
-                            selected = 0;
-                          } else {
-                            // 全問終了
-                            showAnswerDialog(context, "お疲れ様でした！", "✔", Colors.blue);
-                          }
-                        });
-                      },
-                      child: Padding(padding: const EdgeInsets.all(8.0), child: Text("次の問題へ")),
-                    ),
-                  ),
                 ],
               ],
             ),
           ),
         ),
+        floatingActionButton:
+            finalAnswer > 0
+                ? FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      current++;
+                      selectAnswer = 0;
+                      finalAnswer = 0;
+                    });
+                  },
+                  child: const Icon(Icons.arrow_forward),
+                )
+                : null,
       ),
     );
   }
