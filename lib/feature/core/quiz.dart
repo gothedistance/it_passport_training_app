@@ -1,48 +1,37 @@
 class Quiz {
-  final String version;
   final int id;
   final String question;
-  final List<ChoiceQuestions> choices;
-  final int answer;
-  final String classification;
-  final AnswerDescription descriptions;
+  final List<ChoiceQuestions> options;
+  final String correct_answer;
+  final AnswerDescription explanation;
 
   // コンストラクタ
   Quiz({
-    required this.version,
     required this.id,
     required this.question,
-    required this.choices,
-    required this.answer,
-    required this.classification,
-    required this.descriptions,
+    required this.options,
+    required this.correct_answer,
+    required this.explanation,
   });
   // コンストラクタ(クラスの変数ではない引数を元にオブジェクトを作るキーワードがfactory)
-  //factory Quiz.fromJson(Map<String, dynamic> json) {
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
-      version: json['version'] as String,
       id: json['id'] as int,
       question: json['question'] as String,
-      choices:
-          (json['choice_questions'] as List<Map<String, dynamic>>)
-              .map((e) => ChoiceQuestions.fromJson(e))
-              .toList(),
-      answer: json['answer'] as int,
-      classification: json['classification'] as String,
-      descriptions: AnswerDescription.fromJson(json['descriptions']),
+      options: (json['options'] as List<dynamic>).map((e) => ChoiceQuestions.fromJson(e)).toList(),
+      correct_answer: json['correct_answer'] as String,
+      explanation: AnswerDescription.fromJson(json['explanation']),
     );
   }
 }
 
 class ChoiceQuestions {
-  final String key;
   final String value;
   //{"key": "ア", "value": "企業内に蓄積された大量のデータを分析して，事業戦略などに有効活用する"},
-  ChoiceQuestions({required this.key, required this.value});
+  ChoiceQuestions({required this.value});
 
-  factory ChoiceQuestions.fromJson(Map<String, dynamic> json) {
-    return ChoiceQuestions(key: json['key'] as String, value: json['value'] as String);
+  factory ChoiceQuestions.fromJson(String option) {
+    return ChoiceQuestions(value: option);
   }
 }
 
@@ -60,17 +49,17 @@ class AnswerMemo {
 
 class AnswerDescription {
   final String summary;
-  final List<AnswerMemo> answers;
+  //final List<AnswerMemo> answers;
 
-  AnswerDescription({required this.summary, required this.answers});
+  AnswerDescription({required this.summary});
 
-  factory AnswerDescription.fromJson(Map<String, dynamic> json) {
+  factory AnswerDescription.fromJson(String explanation) {
     return AnswerDescription(
-      summary: json['summary'] as String,
-      answers:
-          (json['answer'] as List<Map<String, dynamic>>)
-              .map((e) => AnswerMemo.fromJson(e))
-              .toList(),
+      summary: explanation,
+      //answers:
+      //    (json['answer'] as List<Map<String, dynamic>>)
+      //        .map((e) => AnswerMemo.fromJson(e))
+      //        .toList(),
     );
   }
 }

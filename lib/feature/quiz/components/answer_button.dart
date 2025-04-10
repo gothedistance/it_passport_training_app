@@ -21,6 +21,7 @@ class AnswerButton extends StatelessWidget {
 void showAnswerDialog(BuildContext context, message, icon, Color color) {
   showDialog(
     context: context,
+    useRootNavigator: false,
     builder: (_) {
       return AlertDialog(
         title: Column(

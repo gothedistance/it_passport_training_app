@@ -3,7 +3,6 @@ import 'package:it_passport_training_app/data.dart';
 import 'package:it_passport_training_app/feature/quiz/components/answer_button.dart';
 import 'package:it_passport_training_app/feature/quiz/components/answer_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/choices_widget.dart';
-import 'package:it_passport_training_app/feature/quiz/components/classification_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/description_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/question_number_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/question_widget.dart';
@@ -56,7 +55,7 @@ class QuizScreenState extends State<QuizScreen> {
                       QuestionWidget(questionText: quizData.question),
                       // 問題の選択肢
                       ChoicesWidget(
-                        choiceQuestions: quizData.choices,
+                        choiceQuestions: quizData.options,
                         selected: selectAnswer,
                         onSelected:
                             (answer) => setState(() {
@@ -70,7 +69,7 @@ class QuizScreenState extends State<QuizScreen> {
                                   setState(() {
                                     finalAnswer = selectAnswer;
                                   });
-                                  finalAnswer == quizData.answer
+                                  finalAnswer == quizData.correct_answer
                                       ? showAnswerDialog(context, "正解！", "○", Colors.green)
                                       : showAnswerDialog(context, "残念‥", "×", Colors.red);
                                 }
@@ -78,9 +77,9 @@ class QuizScreenState extends State<QuizScreen> {
                       ),
                       //分類・正解・解説
                       if (finalAnswer > 0) ...[
-                        ClassificationWidget(classification: quizData.classification),
-                        AnswerWidget(answer: quizData.answer),
-                        DescriptionWidget(description: quizData.descriptions),
+                        //ClassificationWidget(classification: quizData.classification),
+                        AnswerWidget(answer: quizData.correct_answer),
+                        DescriptionWidget(description: quizData.explanation),
                       ],
                     ],
                   ),
