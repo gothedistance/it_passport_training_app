@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AnswerWidget extends StatelessWidget {
   const AnswerWidget({super.key, required this.answer});
 
-  final int answer;
+  //final int answer;
+  final String answer;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +18,7 @@ class AnswerWidget extends StatelessWidget {
             SizedBox(height: 10),
             CircleAvatar(
               child: Text(
-                "$answer",
+                answer,
                 style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),

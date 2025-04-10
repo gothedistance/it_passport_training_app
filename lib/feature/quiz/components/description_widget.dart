@@ -30,19 +30,19 @@ class DescriptionWidget extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (final (index, answer) in description.answers.indexed)
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text('問${index + 1}'),
-                              SizedBox(width: 10),
-                              Flexible(child: Text(answer.kaisetu)),
-                            ],
-                          ),
-                          Divider(),
-                        ],
-                      ),
+                    //for (final (index, answer) in description.answers.indexed)
+                    //  Column(
+                    //    children: [
+                    //      Row(
+                    //        children: [
+                    //          Text('問${index + 1}'),
+                    //          SizedBox(width: 10),
+                    //          Flexible(child: Text(answer.kaisetu)),
+                    //        ],
+                    //      ),
+                    //      Divider(),
+                    //    ],
+                    //  ),
                   ],
                 ),
               ],
