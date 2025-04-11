@@ -16,9 +16,9 @@ class QuizScreen extends StatefulWidget {
 
 class QuizScreenState extends State<QuizScreen> {
   // 選択した回答
-  int selectAnswer = 0;
+  String selectAnswer = "";
   // 確定した回答
-  int finalAnswer = 0;
+  String finalAnswer = "";
 
   int current = 1;
 
@@ -55,30 +55,29 @@ class QuizScreenState extends State<QuizScreen> {
                       QuestionWidget(questionText: quizData.question),
                       // 問題の選択肢
                       ChoicesWidget(
-                        choiceQuestions: quizData.options,
+                        choiceQuestions: quizData.choices,
                         selected: selectAnswer,
                         onSelected:
                             (answer) => setState(() {
-                              selectAnswer = answer + 1;
+                              selectAnswer = answer;
                             }),
                       ),
                       AnswerButton(
                         onPressed:
-                            selectAnswer != 0 && finalAnswer == 0
+                            selectAnswer.isNotEmpty && finalAnswer.isEmpty
                                 ? () async {
                                   setState(() {
                                     finalAnswer = selectAnswer;
                                   });
-                                  finalAnswer == quizData.correct_answer
+                                  finalAnswer == quizData.correctAnswer
                                       ? showAnswerDialog(context, "正解！", "○", Colors.green)
                                       : showAnswerDialog(context, "残念‥", "×", Colors.red);
                                 }
                                 : null,
                       ),
                       //分類・正解・解説
-                      if (finalAnswer > 0) ...[
-                        //ClassificationWidget(classification: quizData.classification),
-                        AnswerWidget(answer: quizData.correct_answer),
+                      if (finalAnswer.isNotEmpty) ...[
+                        AnswerWidget(answer: quizData.correctAnswer),
                         DescriptionWidget(description: quizData.explanation),
                       ],
                     ],
@@ -90,13 +89,13 @@ class QuizScreenState extends State<QuizScreen> {
           },
         ),
         floatingActionButton:
-            finalAnswer > 0
+            finalAnswer.isNotEmpty
                 ? FloatingActionButton(
                   onPressed: () {
                     setState(() {
                       current++;
-                      selectAnswer = 0;
-                      finalAnswer = 0;
+                      selectAnswer = "";
+                      finalAnswer = "";
                     });
                   },
                   child: const Icon(Icons.arrow_forward),

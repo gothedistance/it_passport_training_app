@@ -10,9 +10,9 @@ class ChoicesWidget extends StatelessWidget {
   });
 
   // 選択問題を定義
-  final List<ChoiceQuestions> choiceQuestions;
-  final void Function(int answer) onSelected;
-  final int selected;
+  final List<Choices> choiceQuestions;
+  final void Function(String answer) onSelected;
+  final String selected;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +22,14 @@ class ChoicesWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, // 左揃え
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          for (final (index, choiceQuestion) in choiceQuestions.indexed)
+          for (final choiceQuestion in choiceQuestions)
             ListTile(
-              leading: CircleAvatar(child: Text((index + 1).toString())),
+              leading: CircleAvatar(child: Text(choiceQuestion.key)),
               title: Text(choiceQuestion.value),
               onTap: () {
-                onSelected(index);
+                onSelected(choiceQuestion.key);
               },
-              tileColor: selected == index + 1 ? Colors.grey.shade400 : null,
+              tileColor: selected == choiceQuestion.key ? Colors.grey.shade400 : null,
             ),
         ],
       ),
