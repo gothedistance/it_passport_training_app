@@ -23,9 +23,13 @@ class Quiz {
       explanation: AnswerDescription.fromJson(json['explanation']),
     );
   }
+  //List<Choices> getChoices() => choicesという変数で表現したもの
   List<Choices> get choices {
     return options.map((option) {
-      return Choices.fromJson({'key': option.value.substring(0, 1), 'value': option.value});
+      return Choices.fromJson({
+        'key': option.value.substring(0, 1),
+        'value': option.value.substring(1, option.value.length),
+      });
     }).toList();
   }
 }
