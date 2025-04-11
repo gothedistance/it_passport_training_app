@@ -96,3 +96,34 @@ Future<Quiz> getQuizData(int current) async {
   final quizList = jsonData.map((e) => Quiz.fromJson(e)).toList();
   return quizList[current - 1];
 }
+
+/*
+[ 
+  {
+    "version": "2020",
+    "history":  [ 
+     {"no": 1, "answer": "ア", "correct": "エ", },
+    ]
+  }
+]
+[ 
+  {
+    "version": "2020",
+    "history":  [ 
+     {"no": 1, "answer": "ア", "correct": "エ", },
+     {"no": 2, "answer": "ア", "correct": "エ", },
+    ]
+  }
+]
+[ 
+  {
+    "version": "2020",
+    "history":  [ 
+     {"no": 1, "answer": "ア", "correct": "エ", },
+     {"no": 2, "answer": "ア", "correct": "エ", },
+     {"no": 3, "answer": "ア", "correct": "エ", },
+    ]
+  }
+]
+
+*/
