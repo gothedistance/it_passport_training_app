@@ -6,6 +6,7 @@ import 'package:it_passport_training_app/feature/quiz/components/choices_widget.
 import 'package:it_passport_training_app/feature/quiz/components/description_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/question_number_widget.dart';
 import 'package:it_passport_training_app/feature/quiz/components/question_widget.dart';
+import 'package:it_passport_training_app/feature/quiz/result_table.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -16,9 +17,9 @@ class QuizScreen extends StatefulWidget {
 
 class QuizScreenState extends State<QuizScreen> {
   // 選択した回答
-  int selectAnswer = 0;
+  String selectAnswer = "";
   // 確定した回答
-  int finalAnswer = 0;
+  String finalAnswer = "";
 
   int current = 1;
 
@@ -35,6 +36,18 @@ class QuizScreenState extends State<QuizScreen> {
           centerTitle: false,
           title: const Text('ITパスポート2020', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.orange,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ResultTable()),
+                );
+              },
+              icon: const Icon(Icons.history, color: Colors.black),
+              iconSize: 30,
+            ),
+          ],
         ),
         body: FutureBuilder(
           future: getQuizData(current),
@@ -55,30 +68,30 @@ class QuizScreenState extends State<QuizScreen> {
                       QuestionWidget(questionText: quizData.question),
                       // 問題の選択肢
                       ChoicesWidget(
-                        choiceQuestions: quizData.options,
+                        choiceQuestions: quizData.choices,
                         selected: selectAnswer,
                         onSelected:
                             (answer) => setState(() {
-                              selectAnswer = answer + 1;
+                              selectAnswer = answer;
                             }),
                       ),
                       AnswerButton(
                         onPressed:
-                            selectAnswer != 0 && finalAnswer == 0
+                            selectAnswer.isNotEmpty && finalAnswer.isEmpty
                                 ? () async {
                                   setState(() {
                                     finalAnswer = selectAnswer;
+                                    saveAnswer(quizData.id, quizData.correctAnswer, finalAnswer);
                                   });
-                                  finalAnswer == quizData.correct_answer
+                                  finalAnswer == quizData.correctAnswer
                                       ? showAnswerDialog(context, "正解！", "○", Colors.green)
                                       : showAnswerDialog(context, "残念‥", "×", Colors.red);
                                 }
                                 : null,
                       ),
                       //分類・正解・解説
-                      if (finalAnswer > 0) ...[
-                        //ClassificationWidget(classification: quizData.classification),
-                        AnswerWidget(answer: quizData.correct_answer),
+                      if (finalAnswer.isNotEmpty) ...[
+                        AnswerWidget(answer: quizData.correctAnswer),
                         DescriptionWidget(description: quizData.explanation),
                       ],
                     ],
@@ -90,13 +103,13 @@ class QuizScreenState extends State<QuizScreen> {
           },
         ),
         floatingActionButton:
-            finalAnswer > 0
+            finalAnswer.isNotEmpty
                 ? FloatingActionButton(
                   onPressed: () {
                     setState(() {
                       current++;
-                      selectAnswer = 0;
-                      finalAnswer = 0;
+                      selectAnswer = "";
+                      finalAnswer = "";
                     });
                   },
                   child: const Icon(Icons.arrow_forward),
