@@ -14,7 +14,7 @@ class AnswerHistory {
 
 // 現在未使用
 class VersionHistory {
-  final String version;
+  final int version;
   final List<AnswerHistory> history;
   VersionHistory({required this.version, required this.history});
 
@@ -24,7 +24,7 @@ class VersionHistory {
 
   factory VersionHistory.fromJson(Map<String, dynamic> json) {
     return VersionHistory(
-      version: json['version'],
+      version: json['version'] ?? 0,
       history: (json['history'] as List).map((item) => AnswerHistory.fromJson(item)).toList(),
     );
   }

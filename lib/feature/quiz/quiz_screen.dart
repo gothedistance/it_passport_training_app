@@ -9,7 +9,8 @@ import 'package:it_passport_training_app/feature/quiz/components/question_widget
 import 'package:it_passport_training_app/feature/quiz/result_table.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({super.key});
+  final int quizNo;
+  const QuizScreen(this.quizNo, {super.key});
 
   @override
   QuizScreenState createState() => QuizScreenState();
@@ -26,6 +27,8 @@ class QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
+    // 引数から初期値セット
+    current = widget.quizNo;
   }
 
   @override
@@ -81,7 +84,12 @@ class QuizScreenState extends State<QuizScreen> {
                                 ? () async {
                                   setState(() {
                                     finalAnswer = selectAnswer;
-                                    saveAnswer(quizData.id, quizData.correctAnswer, finalAnswer);
+                                    saveAnswer(
+                                      quizData.id,
+                                      quizData.correctAnswer,
+                                      finalAnswer,
+                                      2020,
+                                    );
                                   });
                                   finalAnswer == quizData.correctAnswer
                                       ? showAnswerDialog(context, "正解！", "○", Colors.green)
