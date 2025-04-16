@@ -12,13 +12,14 @@ class ResultTable extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('成績一覧'), backgroundColor: Colors.orange),
       body: FutureBuilder(
-        future: getAnswerHistory(),
+        future: getAnswerHistory(2020),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
           if (snapshot.hasData) {
             final result = snapshot.data!;
+            //final List<AnswerHistory> result = data.expand((e) => e.history).toList();
             // 問題No.を昇順に設定
             result.sort((a, b) => a.no.compareTo(b.no));
             return GridView.builder(
@@ -84,47 +85,54 @@ class ResultTable extends StatelessWidget {
 }
 
 // 回答を保存する関数
-Future<void> saveAnswer(int no, String answer, String correct) async {
+Future<void> saveAnswer(int no, String answer, String correct, int currentVersion) async {
   final prefs = await SharedPreferences.getInstance();
-  const int version = 2020;
+  //const int currentVersion = 2020;
 
-  // 既存の履歴を取得
-  String? historyJson = prefs.getString('history');
-  List<AnswerHistory> historyList = [];
+  String? data = prefs.getString('history');
+  List<VersionHistory> fullHistory = [];
 
-  if (historyJson != null) {
-    // JSON形式の文字列 →　List型
-    final List decoded = jsonDecode(historyJson);
-    // List型　→ List<AnswerHistory>
-    historyList = decoded.map((e) => AnswerHistory.fromJson(e)).toList();
+  if (data != null) {
+    final List decoded = jsonDecode(data);
+    fullHistory = decoded.map((e) => VersionHistory.fromJson(e)).toList();
   }
 
-  // 既存の同じnoがあれば削除（上書き）
-  historyList.removeWhere((item) => item.no == no);
+  // 現在のバージョンが存在するか確認
+  VersionHistory? current = fullHistory.firstWhere(
+    (vh) => vh.version == currentVersion,
+    orElse: () => VersionHistory(version: currentVersion, history: []),
+  );
 
-  // 新しい回答を追加
-  historyList.add(AnswerHistory(no: no, answer: answer, correct: correct));
+  // 同じ no の回答があれば削除（上書き対応）
+  current.history.removeWhere((item) => item.no == no);
+  current.history.add(AnswerHistory(no: no, answer: answer, correct: correct));
 
-  // List<AnswerHistory> → JSON形式の文字列
-  String encoded = jsonEncode(historyList.map((e) => e.toJson()).toList());
-  // バージョン保存
-  await prefs.setInt('version', version);
+  // fullHistory に current を再登録（重複防止）
+  fullHistory.removeWhere((vh) => vh.version == currentVersion);
+  fullHistory.add(current);
 
-  // 問題の履歴保存
-  await prefs.setString('history', encoded);
+  // 保存
+  await prefs.setString('history', jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
+  print(jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
 }
 
 // 回答履歴を取得する関数
-Future<List<AnswerHistory>> getAnswerHistory() async {
+Future<List<AnswerHistory>> getAnswerHistory(int currentVersion) async {
   final prefs = await SharedPreferences.getInstance();
 
   // 問題履歴
   final jsonString = prefs.getString('history');
 
-  // 過去問version
-  final version = prefs.getInt('version');
   if (jsonString == null) return [];
   final List<dynamic> jsonData = jsonDecode(jsonString);
-  final List<AnswerHistory> result = jsonData.map((e) => AnswerHistory.fromJson(e)).toList();
-  return result;
+  final List<VersionHistory> versionHistories =
+      jsonData.map((e) => VersionHistory.fromJson(e as Map<String, dynamic>)).toList();
+
+  // 指定されたversionに一致するhistoryのみ抽出
+  final matchingVersion = versionHistories.firstWhere(
+    (vh) => vh.version == currentVersion,
+    orElse: () => VersionHistory(version: currentVersion, history: []), // 見つからない場合は空のhistory
+  );
+
+  return matchingVersion.history;
 }
