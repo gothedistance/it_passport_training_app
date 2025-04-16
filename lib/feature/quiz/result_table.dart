@@ -19,7 +19,6 @@ class ResultTable extends StatelessWidget {
           }
           if (snapshot.hasData) {
             final result = snapshot.data!;
-            //final List<AnswerHistory> result = data.expand((e) => e.history).toList();
             // 問題No.を昇順に設定
             result.sort((a, b) => a.no.compareTo(b.no));
             return GridView.builder(
@@ -98,10 +97,12 @@ Future<void> saveAnswer(int no, String answer, String correct, int currentVersio
   }
 
   // 現在のバージョンが存在するか確認
+  // 存在しなければ新しくversionを作成
   VersionHistory? current = fullHistory.firstWhere(
     (vh) => vh.version == currentVersion,
     orElse: () => VersionHistory(version: currentVersion, history: []),
   );
+  print(current);
 
   // 同じ no の回答があれば削除（上書き対応）
   current.history.removeWhere((item) => item.no == no);
@@ -109,11 +110,9 @@ Future<void> saveAnswer(int no, String answer, String correct, int currentVersio
 
   // fullHistory に current を再登録（重複防止）
   fullHistory.removeWhere((vh) => vh.version == currentVersion);
-  fullHistory.add(current);
 
   // 保存
   await prefs.setString('history', jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
-  print(jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
 }
 
 // 回答履歴を取得する関数

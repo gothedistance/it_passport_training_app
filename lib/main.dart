@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // 最後に解いた問題番号を取得する関数
-  Future<int> getLastQuizNo() async {
+  Future<int> getLastQuizNo(int targetVersion) async {
     final preft = await SharedPreferences.getInstance();
     final jsonString = preft.getString('history');
 
@@ -23,20 +23,24 @@ class MyApp extends StatelessWidget {
     final List<VersionHistory> versionHistory =
         jsonData.map((e) => VersionHistory.fromJson(e as Map<String, dynamic>)).toList();
 
-    final List<AnswerHistory> allHistory = versionHistory.expand((v) => v.history).toList();
+    final VersionHistory allHistory = versionHistory.firstWhere(
+      (v) => v.version == targetVersion,
+      orElse: () => VersionHistory(version: targetVersion, history: []),
+    );
 
-    if (allHistory.isEmpty) return 1;
+    // historyが空なら0を返す
+    if (allHistory.history.isEmpty) return 0;
 
-    allHistory.sort((a, b) => b.no.compareTo(a.no));
+    allHistory.history.sort((a, b) => b.no.compareTo(a.no));
 
-    return allHistory.first.no + 1;
+    return allHistory.history.first.no + 1;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: FutureBuilder<int>(
-        future: getLastQuizNo(),
+        future: getLastQuizNo(2020),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
