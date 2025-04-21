@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
       orElse: () => VersionHistory(version: targetVersion, history: []),
     );
 
-    // historyが空なら0を返す
-    if (allHistory.history.isEmpty) return 0;
+    // historyが空なら1を返す
+    if (allHistory.history.isEmpty) return 1;
 
     allHistory.history.sort((a, b) => b.no.compareTo(a.no));
 
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: FutureBuilder<int>(
-        future: getLastQuizNo(2020),
+        future: getLastQuizNo(2021),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());

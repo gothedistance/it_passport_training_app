@@ -88,12 +88,7 @@ const dummyData = [
   },
 ];
 
-//final List<Quiz> quizList = dummyData.map((data) => Quiz.fromJson(data)).toList();
-
 Future<Quiz> getQuizData(int current) async {
-  // Simulate a network request
-  //await Future.delayed(const Duration(seconds: 2));
-  //return quizList[current - 1];
   final response = await http.get(
     Uri.parse('https://gothedistance.sakura.ne.jp/it_passport_questions.json'),
   );
@@ -102,54 +97,3 @@ Future<Quiz> getQuizData(int current) async {
   final quizList = jsonData.map((e) => Quiz.fromJson(e)).toList();
   return quizList[current - 1];
 }
-
-/*
-"options": [
-			"ア企業内に蓄積された大量のデータを分析して，事業戦略などに有効活用する。",
-			"イ小売業やサービス業において，販売した商品単位の情報の収集・蓄積及び分析を行う。",
-			"ウこれまで人間が手作業で行っていた定型業務を，AIや機械学習などを取り入れたソフトウェアのロボットが代行することによって自動化や効率化を図る。",
-			"エ見込み顧客の抽出，獲得，育成などの営業活動を効率化する。"
-		],
-"options": [
-{
-  key: "ア",
-  value: "企業内に蓄積された大量のデータを分析して，事業戦略などに有効活用する。    "
-},
-{
-  key: "イ",
-  value: "小売業やサービス業において，販売した商品単位の情報の収集・蓄積及び分析を行う。"
-}
-		],
-
-    */
-
-/*
-[ 
-  {
-    "version": "2020",
-    "history":  [ 
-     {"no": 1, "answer": "ア", "correct": "エ", },
-    ]
-  }
-]
-[ 
-  {
-    "version": "2020",
-    "history":  [ 
-     {"no": 1, "answer": "ア", "correct": "エ", },
-     {"no": 2, "answer": "ア", "correct": "エ", },
-    ]
-  }
-]
-[ 
-  {
-    "version": "2020",
-    "history":  [ 
-     {"no": 1, "answer": "ア", "correct": "エ", },
-     {"no": 2, "answer": "ア", "correct": "エ", },
-     {"no": 3, "answer": "ア", "correct": "エ", },
-    ]
-  }
-]
-
-*/

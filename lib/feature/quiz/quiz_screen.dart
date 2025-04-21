@@ -44,7 +44,7 @@ class QuizScreenState extends State<QuizScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ResultTable()),
+                  MaterialPageRoute(builder: (context) => ResultTable(currentVersion: 2021)),
                 );
               },
               icon: const Icon(Icons.history, color: Colors.black),
@@ -88,7 +88,7 @@ class QuizScreenState extends State<QuizScreen> {
                                       quizData.id,
                                       quizData.correctAnswer,
                                       finalAnswer,
-                                      2020,
+                                      2021,
                                     );
                                   });
                                   finalAnswer == quizData.correctAnswer
