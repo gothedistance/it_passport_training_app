@@ -2,17 +2,54 @@ import 'dart:convert'; // ← JSON操作に必要！
 
 import 'package:flutter/material.dart';
 import 'package:it_passport_training_app/feature/core/answer_history.dart';
+import 'package:it_passport_training_app/feature/quiz/components/review_questions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ResultTable extends StatelessWidget {
-  const ResultTable({super.key});
+  final int currentVersion;
+  const ResultTable({super.key, required this.currentVersion});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('成績一覧'), backgroundColor: Colors.orange),
+      appBar: AppBar(
+        title: Text('成績一覧'),
+        backgroundColor: Colors.orange,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.loop),
+            onPressed: () async {
+              final prefs = await SharedPreferences.getInstance();
+              final String? data = prefs.getString('history');
+              final List<dynamic> jsonData = data != null ? jsonDecode(data) : [];
+              final List<VersionHistory> allHistory =
+                  jsonData.map((e) => VersionHistory.fromJson(e)).toList();
+              final List<AnswerHistory> reviewHistory =
+                  allHistory
+                      .firstWhere(
+                        (v) => v.version == currentVersion,
+                        orElse:
+                            () => VersionHistory(
+                              version: currentVersion,
+                              history: [],
+                            ), // history を空リストで初期化
+                      )
+                      .history
+                      .where((h) => h.answer != h.correct)
+                      .toList();
+              // 不正解問題表示
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReviewQuestions(answerHistory: reviewHistory),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder(
-        future: getAnswerHistory(2020),
+        future: getAnswerHistory(2021),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text(snapshot.error.toString());
@@ -86,19 +123,16 @@ class ResultTable extends StatelessWidget {
 
 // 回答を保存する関数
 Future<void> saveAnswer(int no, String answer, String correct, int currentVersion) async {
-  final prefs = await SharedPreferences.getInstance();
-  //const int currentVersion = 2020;
+  final pref = await SharedPreferences.getInstance();
 
-  String? data = prefs.getString('history');
+  String? data = pref.getString('history');
   List<VersionHistory> fullHistory = [];
 
   if (data != null) {
-    final List decoded = jsonDecode(data);
+    final List<dynamic> decoded = jsonDecode(data);
     fullHistory = decoded.map((e) => VersionHistory.fromJson(e)).toList();
   }
-
-  // 現在のバージョンが存在するか確認
-  VersionHistory? current = fullHistory.firstWhere(
+  final current = fullHistory.firstWhere(
     (vh) => vh.version == currentVersion,
     orElse: () => VersionHistory(version: currentVersion, history: []),
   );
@@ -107,13 +141,14 @@ Future<void> saveAnswer(int no, String answer, String correct, int currentVersio
   current.history.removeWhere((item) => item.no == no);
   current.history.add(AnswerHistory(no: no, answer: answer, correct: correct));
 
+  // setState (() { _counter++; })
+
   // fullHistory に current を再登録（重複防止）
   fullHistory.removeWhere((vh) => vh.version == currentVersion);
   fullHistory.add(current);
 
   // 保存
-  await prefs.setString('history', jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
-  print(jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
+  await pref.setString('history', jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
 }
 
 // 回答履歴を取得する関数
