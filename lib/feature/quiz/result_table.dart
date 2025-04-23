@@ -5,10 +5,14 @@ import 'package:it_passport_training_app/feature/core/answer_history.dart';
 import 'package:it_passport_training_app/feature/quiz/components/review_questions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ResultTable extends StatelessWidget {
+class ResultTable extends StatefulWidget {
   final int currentVersion;
   const ResultTable({super.key, required this.currentVersion});
+  @override
+  State<ResultTable> createState() => ResultTableState();
+}
 
+class ResultTableState extends State<ResultTable> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +31,10 @@ class ResultTable extends StatelessWidget {
               final List<AnswerHistory> reviewHistory =
                   allHistory
                       .firstWhere(
-                        (v) => v.version == currentVersion,
+                        (v) => v.version == widget.currentVersion,
                         orElse:
                             () => VersionHistory(
-                              version: currentVersion,
+                              version: widget.currentVersion,
                               history: [],
                             ), // history を空リストで初期化
                       )
@@ -38,12 +42,13 @@ class ResultTable extends StatelessWidget {
                       .where((h) => h.answer != h.correct)
                       .toList();
               // 不正解問題表示
-              Navigator.push(
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ReviewQuestions(answerHistory: reviewHistory),
                 ),
               );
+              result == true ? setState(() {}) : null;
             },
           ),
         ],
@@ -125,30 +130,37 @@ Future<void> saveAnswer(int no, String answer, String correct, int currentVersio
   final prefs = await SharedPreferences.getInstance();
 
   String? data = prefs.getString('history');
-  List<VersionHistory> fullHistory = [];
-
-  if (data != null) {
-    final List decoded = jsonDecode(data);
-    fullHistory = decoded.map((e) => VersionHistory.fromJson(e)).toList();
-  }
+  print(data);
+  final List<VersionHistory> fullHistory =
+      data != null
+          ? (jsonDecode(data) as List).map((e) => VersionHistory.fromJson(e)).toList()
+          : [];
 
   // 現在のバージョンが存在するか確認
   // 存在しなければ新しくversionを作成
-  VersionHistory? current = fullHistory.firstWhere(
-    (vh) => vh.version == currentVersion,
-    orElse: () => VersionHistory(version: currentVersion, history: []),
-  );
+  final VersionHistory current =
+      fullHistory.any((vh) => vh.version == currentVersion)
+          ? fullHistory.firstWhere((vh) => vh.version == currentVersion)
+          : VersionHistory(version: currentVersion, history: []);
 
-  // 同じ no の回答があれば削除（上書き対応）
-  current.history.removeWhere((item) => item.no == no);
-  current.history.add(AnswerHistory(no: no, answer: answer, correct: correct));
+  // 現在のVersionで同じ　no の存在確認
+  final index = current.history.indexWhere((item) => item.no == no);
+  final newHistory = [...current.history];
 
-  // fullHistory に current を再登録（重複防止）
-  fullHistory.removeWhere((vh) => vh.version == currentVersion);
-  fullHistory.add(current);
+  // 同じ　no が存在する場合上書き
+  // 同じ　no が存在しない場合追加
+  index != -1
+      ? newHistory[index] = AnswerHistory(no: no, answer: answer, correct: correct)
+      : newHistory.add(AnswerHistory(no: no, answer: answer, correct: correct));
 
-  // 保存
-  await prefs.setString('history', jsonEncode(fullHistory.map((e) => e.toJson()).toList()));
+  final updateCurrent = VersionHistory(version: current.version, history: newHistory);
+
+  final updateFullHistory = [
+    ...fullHistory.where((vh) => vh.version != currentVersion),
+    updateCurrent,
+  ];
+
+  await prefs.setString('history', jsonEncode(updateFullHistory.map((e) => e.toJson()).toList()));
 }
 
 // 回答履歴を取得する関数
@@ -157,9 +169,7 @@ Future<List<AnswerHistory>> getAnswerHistory(int currentVersion) async {
 
   // 問題履歴
   final jsonString = prefs.getString('history');
-
-  if (jsonString == null) return [];
-  final List<dynamic> jsonData = jsonDecode(jsonString);
+  final List<dynamic> jsonData = jsonString != null ? jsonDecode(jsonString) : [];
   final List<VersionHistory> versionHistories =
       jsonData.map((e) => VersionHistory.fromJson(e as Map<String, dynamic>)).toList();
 

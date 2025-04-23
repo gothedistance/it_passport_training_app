@@ -12,7 +12,7 @@ class AnswerHistory {
   }
 }
 
-// 現在未使用
+//
 class VersionHistory {
   final int version;
   final List<AnswerHistory> history;

@@ -10,7 +10,16 @@ class ReviewQuestions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('復習問題'), backgroundColor: Colors.orange),
+      appBar: AppBar(
+        title: Text('復習問題'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ),
       body: PageView.builder(
         itemCount: answerHistory.length,
         itemBuilder: (context, index) {
